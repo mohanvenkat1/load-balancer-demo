@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - node-server
+      - python-server
+      - springboot-server
+    networks:
+      - backend
+
+  node-server:
+    build:
+      context: ./node-server
+      dockerfile: Dockerfile
+    container_name: node-server
+    ports:
+      - "3001:3001"
+    networks:
+      - backend
+    environment:
+      - PORT=3001
+
+  python-server:
+    build:
+      context: ./python-server
+      dockerfile: Dockerfile
+    container_name: python-server
+    ports:
+      - "3002:3002"
+    networks:
+      - backend
+    environment:
+      - PORT=3002
+
+  springboot-server:
+    build:
+      context: ./springboot-server
+      dockerfile: Dockerfile
+    container_name: springboot-server
+    ports:
+      - "3003:3003"
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
